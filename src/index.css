@@ -9,3 +9,11 @@
     border-color:#5294e2;
     margin: 0.4em;
 }
+
+.blogPost {
+    margin: 1em;
+    line-height: 0.5em;
+    padding: 1em;
+    border: solid;
+    border-width: 0.1em;
+}

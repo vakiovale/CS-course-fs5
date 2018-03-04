@@ -3,15 +3,15 @@ import React from 'react'
 const Blog = ({ blog, handleClick, visibleStyle }) => (
   <div onClick={handleClick}>
     {blog.title} {blog.author}
-    <div style={visibleStyle}>
+    <div style={visibleStyle} className="blogPost">
       <p>
         Author: {blog.author}
       </p>
       <p>
-        Title: {blog.author}
+        Title: {blog.title}
       </p>
       <p>
-        Url: {blog.author}
+        Url: {blog.url}
       </p>
       <p>
         Likes: {blog.likes}
