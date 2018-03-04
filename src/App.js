@@ -12,6 +12,9 @@ class App extends React.Component {
       error: null,
       username: '',
       password: '',
+      author: '',
+      title: '',
+      url: '',
       user: null
     }
   }
@@ -30,7 +33,7 @@ class App extends React.Component {
 
   }
 
-  handleLoginFieldChange = (event) => {
+  handleFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
@@ -55,6 +58,23 @@ class App extends React.Component {
     }
   }
 
+  addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      author: this.state.author,
+      title: this.state.title,
+      url: this.state.url
+    }
+
+    blogService
+      .create(blogObject)
+      .then(newBlog => {
+        this.setState({
+          blogs: this.state.blogs.concat(newBlog)
+        })
+      })
+  }
+
   logOut = () => {
     console.log('Logging out')
     window.localStorage.removeItem('loggedBlogappUser')
@@ -74,7 +94,7 @@ class App extends React.Component {
               type="text"
               name="username"
               value={this.state.username}
-              onChange={this.handleLoginFieldChange}
+              onChange={this.handleFieldChange}
             />
           </div>
           <div>
@@ -83,7 +103,7 @@ class App extends React.Component {
               type="password"
               name="password"
               value={this.state.password}
-              onChange={this.handleLoginFieldChange}
+              onChange={this.handleFieldChange}
             />
           </div>
           <button type="submit">kirjaudu</button>
@@ -96,11 +116,47 @@ class App extends React.Component {
         <h2>Blogs</h2>
         <button onClick={this.logOut}>kirjaudu ulos</button>
         <p>{this.state.user.name} logged in</p>
+
+        <h2>Luo uusi blogi</h2>
+
+        <form onSubmit={this.addBlog}>
+          <div>
+            author
+            <input
+              type="text"
+              name="author"
+              value={this.state.author}
+              onChange={this.handleFieldChange}
+            />
+          </div>
+          <div>
+            title 
+            <input
+              type="text"
+              name="title"
+              value={this.state.title}
+              onChange={this.handleFieldChange}
+            />
+          </div>
+          <div>
+            url
+            <input
+              type="text"
+              name="url"
+              value={this.state.url}
+              onChange={this.handleFieldChange}
+            />
+          </div>
+          <button type="submit">tallenna</button>
+        </form>
+
+        <h2>Blogit</h2>
         {this.state.blogs.map(blog => 
           <Blog key={blog._id} blog={blog}/>
         )}
       </div>
     )
+
     return (
       <div>
         {this.state.user === null ?
