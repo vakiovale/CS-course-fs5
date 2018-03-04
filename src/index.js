@@ -5,11 +5,10 @@ import { createStore } from 'redux'
 
 const store = createStore(counterReducer)
 
-const Statistiikka = () => {
-  const palautteita = 0
+const Statistiikka = ({ nollaaja }) => {
+  const state = store.getState()
 
-  if (palautteita === 0) {
-    store.dispatch({ type: 'INCREMENT' })
+  if (state.good === 0 && state.ok === 0 && state.bad === 0) {
     return (
       <div>
         <h2>stataistiikka</h2>
@@ -25,35 +24,43 @@ const Statistiikka = () => {
         <tbody>
           <tr>
             <td>hyvä</td>
-            <td></td>
+            <td>{state.good}</td>
           </tr>
           <tr>
             <td>neutraali</td>
-            <td></td>
+            <td>{state.ok}</td>
           </tr>
           <tr>
             <td>huono</td>
-            <td></td>
+            <td>{state.bad}</td>
           </tr>
           <tr>
             <td>keskiarvo</td>
-            <td></td>
+            <td>{(state.good - state.bad)/(state.good + state.ok + state.bad)}</td>
           </tr>
           <tr>
             <td>positiivisia</td>
-            <td></td>
+            <td>{state.good + state.ok}</td>
           </tr>
         </tbody>
       </table>
 
-      <button>nollaa tilasto</button>
+      <button onClick={nollaaja()}>nollaa tilasto</button>
     </div >
   )
 }
 
 class App extends React.Component {
   klik = (nappi) => () => {
-    
+    console.log(nappi)
+    store.dispatch({ type: nappi })
+  }
+
+  nollaaja = () => {
+    return () => {
+      store.dispatch({ type: 'NOLLAA' })
+      console.log('nollaa')
+    }
   }
 
   render() {
@@ -63,7 +70,7 @@ class App extends React.Component {
         <button onClick={this.klik('GOOD')}>hyvä</button>
         <button onClick={this.klik('OK')}>neutraali</button>
         <button onClick={this.klik('BAD')}>huono</button>
-        <Statistiikka />
+        <Statistiikka nollaaja={this.nollaaja} />
       </div>
     )
   }
