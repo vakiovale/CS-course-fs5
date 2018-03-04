@@ -1,0 +1,11 @@
+.notification {
+    color: #5294e2;
+    padding: 1em;
+    font-size: 1.2em;
+    font-weight: 600;
+    border: solid;
+    border-radius: 0.5em;
+    border-width: 0.2em;
+    border-color:#5294e2;
+    margin: 0.4em;
+}

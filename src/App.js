@@ -2,6 +2,18 @@ import React from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
+
+const Notification = ({ message }) => {
+  if(message === null) {
+    return null
+  }
+  return (
+    <div className="notification">
+      {message}
+    </div>
+  )
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -9,12 +21,12 @@ class App extends React.Component {
     this.state = {
       blogs: [],
       showAll: true,
-      error: null,
       username: '',
       password: '',
       author: '',
       title: '',
       url: '',
+      notification: null,
       user: null
     }
   }
@@ -33,6 +45,15 @@ class App extends React.Component {
 
   }
 
+  addNotification = (message) => {
+    this.setState({
+      notification: message
+    })
+    setTimeout(() => {
+      this.setState({ notification: null })
+    }, 5000)
+  }
+
   handleFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
@@ -49,12 +70,7 @@ class App extends React.Component {
       blogService.setToken(user.token) 
       this.setState({ username: '', password: '', user })
     } catch(exception) {
-      this.setState({
-        error: 'käyttäjätunnus tai salasana virheellinen',
-      })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
+      this.addNotification('Väärä käyttäjätunnus tai salasana')
     }
   }
 
@@ -72,6 +88,7 @@ class App extends React.Component {
         this.setState({
           blogs: this.state.blogs.concat(newBlog)
         })
+        this.addNotification('New blog added!')
       })
   }
 
@@ -159,6 +176,7 @@ class App extends React.Component {
 
     return (
       <div>
+        <Notification message={this.state.notification} />
         {this.state.user === null ?
           loginForm() :
           blogs()
