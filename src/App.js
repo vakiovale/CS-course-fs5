@@ -22,6 +22,7 @@ class App extends React.Component {
       notification: null,
       loginVisible: null,
       visible: null,
+      blogVisible: null,
       user: null
     }
   }
@@ -93,6 +94,19 @@ class App extends React.Component {
     window.location.reload()
   }
 
+  showBlogPost = (id) => {
+    return () => {
+      console.log(id)
+      if(this.state.blogVisible !== null && this.state.blogVisible === id) {
+        console.log('Hiding')
+        this.setState({ blogVisible: null })
+      } else {
+        console.log('Showing')
+        this.setState({ blogVisible: id })
+      }
+    }
+  }
+
   render() {
 
     const loginForm = () => {
@@ -111,17 +125,20 @@ class App extends React.Component {
 
     const blogs = () => (
       <div>
-        <h2>Blogs</h2>
-        <button onClick={this.logOut}>kirjaudu ulos</button>
         <p>{this.state.user.name} logged in</p>
+        <button onClick={this.logOut}>kirjaudu ulos</button>
 
-        <BlogForm addBlog={this.addBlog} author={this.state.author} 
-          title={this.state.title} url={this.state.url}
-          handleChange={this.handleFieldChange} />
+        <Togglable buttonLabel="Luo blogi">
+          <BlogForm addBlog={this.addBlog} author={this.state.author} 
+            title={this.state.title} url={this.state.url}
+            handleChange={this.handleFieldChange} />
+        </Togglable>
 
         <h2>Blogit</h2>
         {this.state.blogs.map(blog => 
-          <Blog key={blog._id} blog={blog}/>
+          <Blog key={blog._id} blog={blog} 
+            handleClick={this.showBlogPost(blog._id)}
+            visibleStyle={{ display: this.state.blogVisible !== null && this.state.blogVisible === blog._id ? '' : 'none' }} />
         )}
       </div>
     )
