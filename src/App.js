@@ -55,6 +55,12 @@ class App extends React.Component {
     }
   }
 
+  logOut = () => {
+    console.log('Logging out')
+    window.localStorage.removeItem('loggedBlogappUser')
+    window.location.reload()
+  }
+
   render() {
 
     const loginForm = () => (
@@ -84,17 +90,22 @@ class App extends React.Component {
         </form>
       </div>
     )
+
+    const blogs = () => (
+      <div>
+        <h2>Blogs</h2>
+        <button onClick={this.logOut}>kirjaudu ulos</button>
+        <p>{this.state.user.name} logged in</p>
+        {this.state.blogs.map(blog => 
+          <Blog key={blog._id} blog={blog}/>
+        )}
+      </div>
+    )
     return (
       <div>
         {this.state.user === null ?
           loginForm() :
-          <div>
-            <h2>Blogs</h2>
-            <p>{this.state.user.name} logged in</p>
-            {this.state.blogs.map(blog => 
-              <Blog key={blog._id} blog={blog}/>
-            )}
-          </div>
+          blogs()
         }
 
 
