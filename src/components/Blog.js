@@ -5,7 +5,7 @@ const Blog = ({ blog, handleClick, handleLike, handleDelete, visibleStyle, delet
     <div className='blogHeader' onClick={handleClick}>
       {blog.title} {blog.author}
     </div>
-    <div style={visibleStyle} className="blogPost">
+    <div className='blogContent' style={visibleStyle} className="blogPost">
       <p>
         Author: {blog.author}
       </p>
