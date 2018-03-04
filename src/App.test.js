@@ -17,7 +17,6 @@ describe('<App />', () => {
     app.update()
     const form = app.find(LoginForm)
     const blogs = app.find(Blog)
-    console.log(form) 
     expect(form.text()).toContain('kirjaudu')
     expect(blogs.length).toEqual(0)
   })
