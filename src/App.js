@@ -79,6 +79,19 @@ class App extends React.Component {
     }
   }
 
+  handleDelete = (id) => {
+    return async () => {
+      try {
+        console.log('delete')
+        await blogService.remove(id)
+        this.updateBlogs()
+      } catch(exception) {
+        console.log(exception)
+        this.addNotification('Jotain meni vikaan! Iiks!')
+      }
+    }
+  }
+
 
   login = async (event) => {
     event.preventDefault()
@@ -162,10 +175,13 @@ class App extends React.Component {
 
         <h2>Blogit</h2>
         {this.state.blogs.map(blog => 
-          <Blog key={blog._id} blog={blog} 
+          <Blog key={blog._id} blog={blog}
             handleClick={this.showBlogPost(blog._id)}
             handleLike={this.handleLike(blog._id)}
-            visibleStyle={{ display: this.state.blogVisible !== null && this.state.blogVisible === blog._id ? '' : 'none' }} />
+            handleDelete={this.handleDelete(blog._id)}
+            visibleStyle={{ display: this.state.blogVisible !== null && this.state.blogVisible === blog._id ? '' : 'none' }}
+            deleteVisible={{ display: blog.user === undefined || (this.state.user !== undefined && (blog.user.id === this.state.user._id)) ? '' : 'none' }}
+          />
         )}
       </div>
     )
