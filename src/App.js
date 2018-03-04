@@ -4,6 +4,36 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
 
+class Togglable extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      visible: false
+    }
+  }
+
+  toggleVisibility = () => {
+    this.setState({visible: !this.state.visible})
+  }
+
+  render() {
+    const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
+    const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={this.toggleVisibility}>{this.props.buttonLabel}</button>
+        </div>
+        <div style={showWhenVisible}>
+          {this.props.children}
+          <button onClick={this.toggleVisibility}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+}
+
 const Notification = ({ message }) => {
   if(message === null) {
     return null
@@ -11,6 +41,36 @@ const Notification = ({ message }) => {
   return (
     <div className="notification">
       {message}
+    </div>
+  )
+}
+
+const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
+  return (
+    <div>
+      <h2>Kirjaudu</h2>
+
+      <form onSubmit={handleSubmit}>
+        <div>
+          käyttäjätunnus
+          <input
+            type="text"
+            name="username"
+            value={username}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          salasana
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit">kirjaudu</button>
+      </form>
     </div>
   )
 }
@@ -27,6 +87,8 @@ class App extends React.Component {
       title: '',
       url: '',
       notification: null,
+      loginVisible: null,
+      visible: null,
       user: null
     }
   }
@@ -100,33 +162,19 @@ class App extends React.Component {
 
   render() {
 
-    const loginForm = () => (
-      <div>
-        <h2>Kirjaudu</h2>
-
-        <form onSubmit={this.login}>
-          <div>
-            käyttäjätunnus
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <div>
-            salasana
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <button type="submit">kirjaudu</button>
-        </form>
-      </div>
-    )
+    const loginForm = () => {
+      return (
+        <Togglable buttonLabel="kirjaudu">
+          <LoginForm
+            visible={this.state.visible}
+            username={this.state.username}
+            password={this.state.password}
+            handleChange={this.handleFieldChange}
+            handleSubmit={this.login}
+          />
+        </Togglable>
+      )
+    }
 
     const blogs = () => (
       <div>
