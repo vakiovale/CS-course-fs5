@@ -5,7 +5,7 @@ const LoginForm = ({ handleSubmit, handleChange, username, password }) => {
     <div>
       <h2>Kirjaudu</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form className='loginForm' onSubmit={handleSubmit}>
         <div>
           käyttäjätunnus
           <input
