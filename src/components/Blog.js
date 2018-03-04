@@ -1,8 +1,10 @@
 import React from 'react'
 
-const Blog = ({ blog, handleClick, visibleStyle }) => (
-  <div onClick={handleClick}>
-    {blog.title} {blog.author}
+const Blog = ({ blog, handleClick, handleLike, visibleStyle }) => (
+  <div>
+    <div onClick={handleClick}>
+      {blog.title} {blog.author}
+    </div>
     <div style={visibleStyle} className="blogPost">
       <p>
         Author: {blog.author}
@@ -15,6 +17,7 @@ const Blog = ({ blog, handleClick, visibleStyle }) => (
       </p>
       <p>
         Likes: {blog.likes}
+        <button onClick={handleLike}>like</button>
       </p>
       <p>
         Added by: {blog.user !== undefined ? blog.user.username : 'unknown'}

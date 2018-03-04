@@ -54,6 +54,28 @@ class App extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  handleLike = (id) => {
+    return async () => {
+      try {
+        console.log('Liked ', id)
+        const blogs = await blogService.getAll()
+        const blog = (blogs.filter(blog => blog._id === id))[0]
+        if(blog !== undefined) {
+          blog.likes = blog.likes + 1
+          console.log('trying to update')
+          await blogService.update(id, blog)
+        }
+        await blogService.getAll().then(blogs =>
+          this.setState({ blogs })
+        )
+      } catch(exception) {
+        console.log(exception)
+        this.addNotification('Jotain meni vikaan! Iiks!')
+      }
+    }
+  }
+
+
   login = async (event) => {
     event.preventDefault()
     try{
@@ -138,6 +160,7 @@ class App extends React.Component {
         {this.state.blogs.map(blog => 
           <Blog key={blog._id} blog={blog} 
             handleClick={this.showBlogPost(blog._id)}
+            handleLike={this.handleLike(blog._id)}
             visibleStyle={{ display: this.state.blogVisible !== null && this.state.blogVisible === blog._id ? '' : 'none' }} />
         )}
       </div>
