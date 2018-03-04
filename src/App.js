@@ -27,10 +27,16 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
+  updateBlogs = async () => {
+    await blogService.getAll().then(blogs =>
+      this.setState({ blogs: blogs.sort(function(prev, next) {
+        return next.likes - prev.likes
+      }) })
     )
+  }
+
+  componentDidMount() {
+    this.updateBlogs()
 
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if(loggedUserJSON) {
@@ -65,9 +71,7 @@ class App extends React.Component {
           console.log('trying to update')
           await blogService.update(id, blog)
         }
-        await blogService.getAll().then(blogs =>
-          this.setState({ blogs })
-        )
+        this.updateBlogs()
       } catch(exception) {
         console.log(exception)
         this.addNotification('Jotain meni vikaan! Iiks!')
