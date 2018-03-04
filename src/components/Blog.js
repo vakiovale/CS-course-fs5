@@ -2,7 +2,7 @@ import React from 'react'
 
 const Blog = ({ blog, handleClick, handleLike, handleDelete, visibleStyle, deleteVisible }) => (
   <div>
-    <div onClick={handleClick}>
+    <div className='blogHeader' onClick={handleClick}>
       {blog.title} {blog.author}
     </div>
     <div style={visibleStyle} className="blogPost">
